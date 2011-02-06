@@ -11,8 +11,10 @@ pressing Ctrl+Up and Ctrl+Down you can step through the sections of the ini file
 Everything can be accessed through the list box seen on the screen and the
 context menu of the list box. Its very simple and theres no more in it ;-)
 
-SoundBoard was compiled using Turbo Delphi 2006. No additional components were
-used.
+SoundBoard was compiled using Turbo Delphi 2006. For registering windows system
+wide hot keys the control DFHotKey is used, which seems to be no longer available
+from the author. In future versions the RegisterHotkey windows api function
+will be used natively.
 
 Malte Schmitz
 Neuendeich

@@ -25,6 +25,7 @@ type
     FCurSection: Integer;
     FCurFiles: TStringList;
     FHotKeys: TObjectList;
+    procedure LoadSections;
     procedure LoadSection(NewSection: Integer);
     procedure HandleEntry(const Name, Value: String);
     procedure PlayHotKey(Sender: TObject);
@@ -100,6 +101,7 @@ begin
   FHotKeys := TObjectList.Create;
   FHotKeys.OwnsObjects := True;
 
+  LoadSections;
   LoadSection(0);
 end;
 
@@ -155,7 +157,6 @@ var
   List: TStringList;
   s: String;
   i: Integer;
-  Item: TMenuItem;
 begin
   List := TStringList.Create;
   try
@@ -166,26 +167,13 @@ begin
       ClosePlayer;
 
       FHotKeys.Clear;
-      PopupMenu.Items.Clear;
       ListBox.Clear;
       FCurFiles.Clear;
 
-      PopupMenu.Items.Add(NewItem('Weiter', ShortCut(VK_UP, [ssCtrl]), False, True, UpMenuItemClick, 0, ''));
-      PopupMenu.Items.Add(NewItem('Zurück', ShortCut(VK_DOWN, [ssCtrl]), False, True, DownMenuItemClick, 0, ''));
-      PopupMenu.Items.Add(NewItem('-', 0, False, True, nil, 0, ''));
-
-      for i := 0 to List.Count - 1 do
-      begin
-        Item := NewItem(List.Strings[i], 0, False, True, LoadMenuItemClick, 0, '');
-        Item.GroupIndex := 1;
-        Item.RadioItem := True;
-        Item.Tag := i;
-        Item.Checked := i = NewSection;
-        PopupMenu.Items.Add(Item);
-      end;
-
       s := List.Strings[NewSection];
       FCurSection := NewSection;
+
+      PopupMenu.Items[NewSection + 3].Checked := True;
 
       Caption := Format(CAPTION_TEMPLATE, [s]);
       Application.Title := Caption;
@@ -195,6 +183,35 @@ begin
         HandleEntry(List.Names[i], List.ValueFromIndex[i]);
 
       ListBox.ItemIndex := 0;
+    end;
+  finally
+    List.Free;
+  end;
+end;
+
+procedure TMainForm.LoadSections;
+var
+  List: TStringList;
+  i: Integer;
+  Item: TMenuItem;
+begin
+  PopupMenu.Items.Clear;
+
+  PopupMenu.Items.Add(NewItem('Weiter', ShortCut(VK_UP, [ssCtrl]), False, True, UpMenuItemClick, 0, ''));
+  PopupMenu.Items.Add(NewItem('Zurück', ShortCut(VK_DOWN, [ssCtrl]), False, True, DownMenuItemClick, 0, ''));
+  PopupMenu.Items.Add(NewItem('-', 0, False, True, nil, 0, ''));
+
+  List := TStringList.Create;
+  try
+    FIniFile.ReadSections(List);
+
+    for i := 0 to List.Count - 1 do
+    begin
+      Item := NewItem(List.Strings[i], 0, False, True, LoadMenuItemClick, 0, '');
+      Item.GroupIndex := 1;
+      Item.RadioItem := True;
+      Item.Tag := i;
+      PopupMenu.Items.Add(Item);
     end;
   finally
     List.Free;

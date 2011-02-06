@@ -1,0 +1,19 @@
+SoundBoard is a tiny win32 application that plays MP3 files. The MP3 files
+are played if you press different keys registered as system wide hot keys
+in windows. MP3 files and hot keys are specified using an ini file named
+like the executable. Take a look at the example in the bin folder to see how
+this works.
+
+If you start the program you can play the files by double clicking the entry, 
+selecting the entry and pressing Enter or pressing the specified hot key. By
+pressing Ctrl+Up and Ctrl+Down you can step through the sections of the ini file.
+
+Everything can be accessed through the list box seen on the screen and the
+context menu of the list box. Its very simple and theres no more in it ;-)
+
+SoundBoard was compiled using Turbo Delphi 2006. No additional components were
+used.
+
+Malte Schmitz
+Neuendeich
+2011-02-06
